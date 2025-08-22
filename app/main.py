@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.db import create_tables
+from app.routes import debtor, user
 
 from app.models.user import Role, User
 
@@ -31,3 +32,6 @@ def on_startup():
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+app.include_router(debtor.router)
+app.include_router(user.router)
