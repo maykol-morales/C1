@@ -1,6 +1,32 @@
 from fastapi import FastAPI
 
+from app.models.user import Role, User
+
 app = FastAPI()
+
+admin = User(
+    organization="CallCenter",
+    role=Role.ADMIN
+)
+
+workers = [
+    User(
+        organization="CallCenter",
+        role=Role.WORKER
+    ),
+    User(
+        organization="CallCenter",
+        role=Role.WORKER
+    ),
+    User(
+        organization="CallCenter",
+        role=Role.WORKER
+    ),
+    User(
+        organization="CallCenter",
+        role=Role.WORKER
+    )
+]
 
 
 @app.get("/")
