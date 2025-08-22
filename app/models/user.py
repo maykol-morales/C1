@@ -1,9 +1,9 @@
-from enum import Enum
 from uuid import uuid4
+from enum import Enum
 
-from pydantic import BaseModel, Field
-
-from app.models.debtor import Debtor
+from sqlalchemy import Column, String, Enum as SQLEnum, ForeignKey
+from sqlalchemy.orm import relationship
+from app.db import Base
 
 
 class Role(str, Enum):
@@ -11,9 +11,19 @@ class Role(str, Enum):
     WORKER = "worker"
 
 
-class User(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid4()))
+class User(Base):
+    __tablename__ = "users"
 
-    organization: str
-    workload: list[Debtor] = []
-    role: Role
+    id = Column(
+        String,
+        primary_key=True,
+        default=lambda: str(uuid4())
+    )
+    organization = Column(String(100), nullable=False)
+    role = Column(SQLEnum(Role), nullable=False)
+
+    workload = relationship(
+        "Debtor",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )

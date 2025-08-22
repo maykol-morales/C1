@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.db import create_tables
 
 from app.models.user import Role, User
 
@@ -24,7 +25,9 @@ workers = [
     )
 ]
 
-
+@app.on_event("startup")
+def on_startup():
+    create_tables()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
